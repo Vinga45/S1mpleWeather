@@ -1,1 +1,34 @@
+h1 {
+    /* S1MPLE WEATHER */
 
+position: absolute;
+width: 1233px;
+height: 80px;
+left: 103px;
+top: 25px;
+
+font-family: 'Libre Barcode 39 Extended Text';
+font-style: normal;
+font-weight: 400;
+font-size: 80px;
+line-height: 80px;
+/* identical to box height */
+text-align: center;
+
+color: #FFFFFF;
+
+
+
+}
+
+header {
+    /* Rectangle 1 */
+
+position: absolute;
+height: 130px;
+left: 0px;
+top: 0px;
+
+background: #094074;
+
+}
