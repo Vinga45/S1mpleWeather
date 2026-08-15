@@ -1,34 +1,325 @@
-h1 {
-    /* S1MPLE WEATHER */
-
-position: absolute;
-width: 1233px;
-height: 80px;
-left: 103px;
-top: 25px;
-
-font-family: 'Libre Barcode 39 Extended Text';
-font-style: normal;
-font-weight: 400;
-font-size: 80px;
-line-height: 80px;
-/* identical to box height */
-text-align: center;
-
-color: #FFFFFF;
-
-
-
-}
-
-header {
-    /* Rectangle 1 */
-
-position: absolute;
-height: 130px;
-left: 0px;
-top: 0px;
-
-background: #094074;
-
-}
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap');
+ 
+  :root{
+    --navy:#0f2c52;
+    --navy-deep:#0a1e38;
+    --steel:#9aa1a8;
+    --steel-dark:#7e858c;
+    --card:#f2f1ec;
+    --ink:#171614;
+    --ink-soft:#4a4844;
+    --tag-red:#b5432f;
+    --line:#c9c6bd;
+    --paper-shadow: 0 18px 40px rgba(10,20,40,.25);
+  }
+ 
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{
+    background:var(--steel);
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    -webkit-font-smoothing:antialiased;
+  }
+ 
+  /* ===== HEADER ===== */
+  header{
+    background:linear-gradient(180deg,var(--navy) 0%, var(--navy-deep) 100%);
+    padding:18px 20px 14px;
+    text-align:center;
+    flex-shrink:0;
+    position:relative;
+    overflow:hidden;
+  }
+  .barcode{
+    display:flex;
+    justify-content:center;
+    align-items:flex-end;
+    gap:2px;
+    height:34px;
+    margin:0 auto 6px;
+    max-width:520px;
+  }
+  .barcode span{
+    display:block;
+    background:#fff;
+    width:2px;
+    height:100%;
+  }
+  .barcode span:nth-child(3n){width:3px;}
+  .barcode span:nth-child(5n){width:1px;}
+  .barcode span:nth-child(7n){height:70%;}
+  .wordmark{
+    color:#fff;
+    letter-spacing:.55em;
+    font-size:15px;
+    font-weight:600;
+    margin:0;
+    padding-left:.55em;
+  }
+ 
+  /* ===== MAIN ===== */
+  main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:28px 18px 40px;
+  }
+  .page{width:100%;max-width:520px;display:none;}
+  .page.active{display:block;}
+ 
+  /* ===== PAGE 1 — CITY SEARCH ===== */
+  .search-shell{
+    min-height:60vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .search-box{
+    background:var(--card);
+    border-radius:18px;
+    box-shadow:var(--paper-shadow);
+    padding:44px 34px;
+    width:100%;
+    text-align:center;
+    border:1px solid var(--line);
+    position:relative;
+  }
+  .search-box::before{
+    content:"";
+    position:absolute;
+    top:-9px;left:50%;
+    transform:translateX(-50%);
+    width:18px;height:18px;
+    background:var(--steel);
+    border-radius:50%;
+    border:1px solid var(--line);
+  }
+  .eyebrow{
+    letter-spacing:.35em;
+    font-size:11px;
+    color:var(--ink-soft);
+    margin:0 0 18px;
+  }
+  .search-title{
+    font-family:'Fraunces', serif;
+    font-size:28px;
+    font-weight:500;
+    margin:0 0 28px;
+    letter-spacing:.01em;
+  }
+  #cityInput{
+    width:100%;
+    aspect-ratio:1/1;
+    max-width:260px;
+    margin:0 auto 24px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fff;
+    border:2px solid var(--navy);
+    border-radius:6px;
+  }
+  #cityInput input{
+    width:88%;
+    border:none;
+    outline:none;
+    background:transparent;
+    text-align:center;
+    font-family:'Fraunces', serif;
+    font-size:22px;
+    color:var(--ink);
+  }
+  #cityInput input::placeholder{color:#b7b2a8;font-size:15px;letter-spacing:.03em;}
+ 
+  .go-btn{
+    width:100%;
+    max-width:260px;
+    padding:14px 0;
+    background:var(--navy);
+    color:#fff;
+    border:none;
+    border-radius:6px;
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:600;
+    letter-spacing:.18em;
+    font-size:12px;
+    cursor:pointer;
+    transition:background .15s ease, transform .1s ease;
+  }
+  .go-btn:hover{background:var(--navy-deep);}
+  .go-btn:active{transform:scale(.98);}
+  .go-btn:disabled{opacity:.5;cursor:wait;}
+ 
+  .status-line{
+    margin-top:16px;
+    font-size:11.5px;
+    color:var(--ink-soft);
+    min-height:16px;
+    letter-spacing:.02em;
+  }
+  .status-line.error{color:var(--tag-red);}
+ 
+  /* ===== TABS ===== */
+  .tab-row{
+    display:flex;
+    gap:10px;
+    margin-bottom:14px;
+  }
+  .tab{
+    flex:1;
+    background:var(--navy-deep);
+    color:#cfd6e2;
+    border:none;
+    border-radius:8px 8px 3px 3px;
+    padding:10px 6px 9px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:.14em;
+    font-weight:600;
+    cursor:pointer;
+    position:relative;
+    text-align:center;
+    transition:background .15s ease, color .15s ease;
+  }
+  .tab .tab-date{
+    display:block;
+    font-size:9px;
+    letter-spacing:.06em;
+    opacity:.65;
+    margin-top:3px;
+    font-weight:400;
+  }
+  .tab.active{
+    background:var(--card);
+    color:var(--ink);
+  }
+  .tab.active .tab-date{opacity:.55;}
+  .tab::after{
+    content:"";
+    position:absolute;
+    bottom:-1px;left:50%;
+    transform:translateX(-50%);
+    width:6px;height:6px;
+    background:var(--steel);
+    border-radius:50%;
+  }
+  .tab.active::after{background:var(--card);}
+ 
+  /* ===== WEATHER CARD ===== */
+  .date-label{
+    font-size:15px;
+    letter-spacing:.02em;
+    margin:0 0 10px 4px;
+    color:var(--ink);
+    font-weight:500;
+  }
+  .card{
+    background:var(--card);
+    border-radius:0 18px 18px 18px;
+    box-shadow:var(--paper-shadow);
+    border:1px solid var(--line);
+    padding:30px 28px 26px;
+    position:relative;
+  }
+  .card-heading{
+    text-align:center;
+    font-family:'IBM Plex Mono',monospace;
+    letter-spacing:.4em;
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink-soft);
+    margin:0 0 22px;
+  }
+ 
+  .weather-row{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    margin-bottom:22px;
+    padding-bottom:20px;
+    border-bottom:1px dashed var(--line);
+  }
+  .weather-icon{width:64px;height:64px;flex-shrink:0;}
+  .condition-text{
+    font-family:'Fraunces', serif;
+    font-size:19px;
+    color:var(--ink);
+    margin:0;
+    line-height:1.25;
+  }
+ 
+  .stat-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-bottom:20px;
+  }
+  .stat-label{
+    font-size:14px;
+    letter-spacing:.1em;
+    color:var(--ink-soft);
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  .stat-value{
+    font-family:'Fraunces', serif;
+    font-size:44px;
+    line-height:1;
+    margin:0;
+    color:var(--ink);
+  }
+  .stat-value sup{font-size:20px;top:-1.4em;}
+ 
+  .rain-stamp{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px 16px;
+  }
+  .rain-icon{width:30px;height:30px;flex-shrink:0;}
+  .rain-copy{flex:1;}
+  .rain-label{
+    font-size:9.5px;
+    letter-spacing:.16em;
+    color:var(--ink-soft);
+    margin:0 0 2px;
+  }
+  .rain-value{
+    font-size:20px;
+    font-weight:700;
+    color:var(--tag-red);
+    margin:0;
+  }
+ 
+  .placeholder-note{
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:12px;
+    padding:30px 10px;
+  }
+ 
+  .back-link{
+    display:block;
+    text-align:center;
+    margin-top:18px;
+    color:var(--navy-deep);
+    text-decoration:none;
+    font-size:11px;
+    letter-spacing:.16em;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .back-link:hover{text-decoration:underline;}
+ 
+  @media (max-width:420px){
+    .stat-value{font-size:36px;}
+    .search-box{padding:34px 22px;}
+  }
