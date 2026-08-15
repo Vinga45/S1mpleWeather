@@ -1,16 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S1MPLE WEATHER</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        S1MPLE WEATHER
-    </header>
 
-<script src="scritp.js"></script>
+<header>
+  <div class="barcode" id="barcode"></div>
+  <p class="wordmark">S1MPLE WEATHER</p>
+</header>
+
+<main>
+
+  <!-- PAGE 1: CITY SEARCH -->
+  <section class="page active" id="page-search">
+    <div class="search-shell">
+      <div class="search-box">
+        <p class="eyebrow">КРОК 01 · ЛОКАЦІЯ</p>
+        <h1 class="search-title">Ваше місто?</h1>
+        <div id="cityInput">
+          <input type="text" id="cityField" placeholder="напр. Київ" autocomplete="off">
+        </div>
+        <button class="go-btn" id="goBtn">ОТРИМАТИ ПРОГНОЗ</button>
+        <p class="status-line" id="statusLine"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAGE 2: TODAY -->
+  <section class="page" id="page-today">
+    <div class="tab-row">
+      <button class="tab active" id="tabToday" data-target="page-today"></button>
+      <button class="tab" id="tabTomorrow" data-target="page-tomorrow"></button>
+    </div>
+    <p class="date-label" id="dateLabelToday"></p>
+    <p class="city-label" id="cityLabelToday"></p>
+    <div class="card">
+      <p class="card-heading">TODAY</p>
+      <div id="bodyToday"></div>
+    </div>
+    <a class="back-link" id="backLink1">← ІНШЕ МІСТО</a>
+  </section>
+
+  <!-- PAGE 3: TOMORROW -->
+  <section class="page" id="page-tomorrow">
+    <div class="tab-row">
+      <button class="tab" id="tabToday2" data-target="page-today"></button>
+      <button class="tab active" id="tabTomorrow2" data-target="page-tomorrow"></button>
+    </div>
+    <p class="date-label" id="dateLabelTomorrow"></p>
+    <p class="city-label" id="cityLabelTomorrow"></p>
+    <div class="card">
+      <p class="card-heading">TOMORROW</p>
+      <div id="bodyTomorrow"></div>
+    </div>
+    <a class="back-link" id="backLink2">← ІНШЕ МІСТО</a>
+  </section>
+
+</main>
+
+
+<script src="script.js"></script>
 </body>
 </html>
