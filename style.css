@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap');
+ @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap');
  
   :root{
     --navy:#0f2c52;
@@ -214,9 +214,16 @@
   .date-label{
     font-size:15px;
     letter-spacing:.02em;
-    margin:0 0 10px 4px;
+    margin:0 0 2px 4px;
     color:var(--ink);
     font-weight:500;
+  }
+  .city-label{
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    margin:0 0 12px 4px;
+    color:var(--ink-soft);
   }
   .card{
     background:var(--card);
@@ -318,6 +325,119 @@
     cursor:pointer;
   }
   .back-link:hover{text-decoration:underline;}
+ 
+  header{position:relative; z-index:5;}
+ 
+  /* ===== WEATHER BACKGROUND FX ===== */
+  .page{position:relative;}
+  .weather-fx{
+    position:fixed;
+    inset:0;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:0;
+  }
+  .page > .tab-row,
+  .page > .date-label,
+  .page > .city-label,
+  .page > .card,
+  .page > .back-link,
+  .page > .search-shell{
+    position:relative;
+    z-index:1;
+  }
+ 
+  /* --- Sun --- */
+  .fx-sun-wrap{
+    position:absolute;
+    top:-30px;
+    right:-30px;
+    width:240px;
+    height:240px;
+    opacity:.8;
+  }
+  .fx-sun-core{
+    position:absolute;
+    top:50%;left:50%;
+    width:100px;height:100px;
+    margin:-50px 0 0 -50px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(214,168,74,.75) 0%, rgba(214,168,74,0) 70%);
+    animation:sunPulse 4.5s ease-in-out infinite;
+  }
+  .fx-sun-rays{
+    position:absolute;
+    inset:0;
+    animation:sunSpin 60s linear infinite;
+  }
+  .fx-sun-rays span{
+    position:absolute;
+    top:50%;left:50%;
+    width:3px;
+    height:105px;
+    margin:-52px 0 0 -1.5px;
+    background:linear-gradient(to bottom, rgba(214,168,74,.65), rgba(214,168,74,0));
+    transform-origin:center 52px;
+  }
+  @keyframes sunPulse{
+    0%,100%{transform:scale(1);opacity:.95;}
+    50%{transform:scale(1.14);opacity:.65;}
+  }
+  @keyframes sunSpin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+  }
+ 
+  /* --- Clouds --- */
+  .fx-cloud{
+    position:absolute;
+    background:rgba(255,255,255,.7);
+    border-radius:50%;
+    filter:blur(1px);
+    animation-name:cloudDrift;
+    animation-timing-function:linear;
+    animation-iteration-count:infinite;
+  }
+  @keyframes cloudDrift{
+    from{transform:translateX(-160px);}
+    to{transform:translateX(calc(100vw + 160px));}
+  }
+ 
+  /* --- Snow --- */
+  .fx-snow{
+    position:absolute;
+    top:-10px;
+    background:rgba(255,255,255,.95);
+    border-radius:50%;
+    box-shadow:0 0 4px rgba(255,255,255,.6);
+    animation-name:snowFall;
+    animation-timing-function:linear;
+    animation-iteration-count:infinite;
+  }
+  @keyframes snowFall{
+    0%{transform:translate(0,-10px);}
+    50%{transform:translate(18px, 50vh);}
+    100%{transform:translate(-8px, 105vh);}
+  }
+ 
+  /* --- Rain --- */
+  .fx-rain{
+    position:absolute;
+    top:-30px;
+    width:2.5px;
+    background:linear-gradient(to bottom, rgba(30,70,130,0), rgba(30,70,130,.65));
+    border-radius:2px;
+    transform:rotate(12deg);
+    animation-name:rainFall;
+    animation-timing-function:linear;
+    animation-iteration-count:infinite;
+  }
+  @keyframes rainFall{
+    0%{transform:translateY(-30px) rotate(12deg);}
+    100%{transform:translateY(105vh) rotate(12deg);}
+  }
  
   @media (max-width:420px){
     .stat-value{font-size:36px;}

@@ -83,6 +83,103 @@ document.addEventListener("DOMContentLoaded", function () {
     return d.toLocaleDateString('uk-UA', { day: '2-digit', month: '2-digit' });
   }
  
+  /* ---------- background weather fx (sun rays / clouds / snow / rain) ---------- */
+  function fxCategory(conditionText) {
+    const t = (conditionText || '').toLowerCase();
+    if (/дощ|злив|мря|гроз|шторм/.test(t)) return 'rain';
+    if (/сніг/.test(t)) return 'snow';
+    if (/сонячно|ясно|сонце/.test(t)) return 'sun';
+    if (/хмарно з прояснен|мінлив/.test(t)) return 'partly';
+    return 'cloudy';
+  }
+ 
+  function rand(min, max) { return Math.random() * (max - min) + min; }
+ 
+  function buildSun(container) {
+    const wrap = document.createElement('div');
+    wrap.className = 'fx-sun-wrap';
+    const core = document.createElement('div');
+    core.className = 'fx-sun-core';
+    const rays = document.createElement('div');
+    rays.className = 'fx-sun-rays';
+    for (let i = 0; i < 10; i++) {
+      const ray = document.createElement('span');
+      ray.style.transform = `rotate(${i * 36}deg)`;
+      rays.appendChild(ray);
+    }
+    wrap.appendChild(rays);
+    wrap.appendChild(core);
+    container.appendChild(wrap);
+  }
+ 
+  function buildClouds(container, count) {
+    for (let i = 0; i < count; i++) {
+      const cloud = document.createElement('div');
+      cloud.className = 'fx-cloud';
+      const w = rand(100, 190);
+      const h = w * 0.42;
+      cloud.style.width = w + 'px';
+      cloud.style.height = h + 'px';
+      cloud.style.top = rand(4, 55) + '%';
+      cloud.style.left = '-160px';
+      cloud.style.opacity = rand(.45, .75).toFixed(2);
+      const dur = rand(28, 50);
+      cloud.style.animationDuration = dur + 's';
+      cloud.style.animationDelay = (-rand(0, dur)) + 's';
+      container.appendChild(cloud);
+    }
+  }
+ 
+  function buildSnow(container, count) {
+    for (let i = 0; i < count; i++) {
+      const flake = document.createElement('div');
+      flake.className = 'fx-snow';
+      const size = rand(4, 10);
+      flake.style.width = size + 'px';
+      flake.style.height = size + 'px';
+      flake.style.left = rand(0, 100) + '%';
+      flake.style.opacity = rand(.55, 1).toFixed(2);
+      const dur = rand(6, 12);
+      flake.style.animationDuration = dur + 's';
+      flake.style.animationDelay = (-rand(0, dur)) + 's';
+      container.appendChild(flake);
+    }
+  }
+ 
+  function buildRain(container, count) {
+    for (let i = 0; i < count; i++) {
+      const drop = document.createElement('div');
+      drop.className = 'fx-rain';
+      drop.style.height = rand(18, 34) + 'px';
+      drop.style.left = rand(0, 100) + '%';
+      drop.style.opacity = rand(.45, .85).toFixed(2);
+      const dur = rand(.5, 1.1);
+      drop.style.animationDuration = dur + 's';
+      drop.style.animationDelay = (-rand(0, dur)) + 's';
+      container.appendChild(drop);
+    }
+  }
+ 
+  function renderWeatherFX(containerId, conditionText) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = '';
+    const cat = fxCategory(conditionText);
+ 
+    if (cat === 'sun') {
+      buildSun(container);
+    } else if (cat === 'cloudy') {
+      buildClouds(container, 5);
+    } else if (cat === 'partly') {
+      buildSun(container);
+      buildClouds(container, 3);
+    } else if (cat === 'snow') {
+      buildSnow(container, 34);
+    } else if (cat === 'rain') {
+      buildRain(container, 36);
+    }
+  }
+ 
   /* ---------- render a day's card body ---------- */
   function renderDay(container, dayData) {
     container.innerHTML = `
@@ -222,26 +319,39 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
  
+  /* ---------- safe DOM helper: never throws if element is missing ---------- */
+  function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  }
+  function setHTML(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = value;
+  }
+ 
   function populatePages() {
     if (!weatherState) return;
  
-    document.getElementById('dateLabelToday').textContent = formatDate(weatherState.day1.date);
-    document.getElementById('dateLabelTomorrow').textContent = formatDate(weatherState.day2.date);
-    document.getElementById('cityLabelToday').textContent = weatherState.city;
-    document.getElementById('cityLabelTomorrow').textContent = weatherState.city;
+    setText('dateLabelToday', formatDate(weatherState.day1.date));
+    setText('dateLabelTomorrow', formatDate(weatherState.day2.date));
+    setText('cityLabelToday', weatherState.city);
+    setText('cityLabelTomorrow', weatherState.city);
  
-    renderDay(document.getElementById('bodyToday'), weatherState.day1);
-    renderDay(document.getElementById('bodyTomorrow'), weatherState.day2);
+    const bodyToday = document.getElementById('bodyToday');
+    const bodyTomorrow = document.getElementById('bodyTomorrow');
+    if (bodyToday) renderDay(bodyToday, weatherState.day1);
+    if (bodyTomorrow) renderDay(bodyTomorrow, weatherState.day2);
+ 
+    renderWeatherFX('fxToday', weatherState.day1.condition);
+    renderWeatherFX('fxTomorrow', weatherState.day2.condition);
  
     const d1 = weekdayShort(weatherState.day1.date, 'СЬОГОДНІ');
     const d2 = weekdayShort(weatherState.day2.date, 'ЗАВТРА');
  
-    [document.getElementById('tabToday'), document.getElementById('tabToday2')].forEach(t => {
-      t.innerHTML = `СЬОГОДНІ<span class="tab-date">${d1}</span>`;
-    });
-    [document.getElementById('tabTomorrow'), document.getElementById('tabTomorrow2')].forEach(t => {
-      t.innerHTML = `ЗАВТРА<span class="tab-date">${d2}</span>`;
-    });
+    setHTML('tabToday', `СЬОГОДНІ<span class="tab-date">${d1}</span>`);
+    setHTML('tabToday2', `СЬОГОДНІ<span class="tab-date">${d1}</span>`);
+    setHTML('tabTomorrow', `ЗАВТРА<span class="tab-date">${d2}</span>`);
+    setHTML('tabTomorrow2', `ЗАВТРА<span class="tab-date">${d2}</span>`);
   }
  
   document.querySelectorAll('.tab').forEach(tab => {
